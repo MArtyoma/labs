@@ -1,38 +1,37 @@
 from utils import (
     FILE_IS_NOT_EXISTS,
     PERMISSION_ERROR,
-    currentFreeSpace,
+    current_free_space,
     equils,
-    getUserInput,
-    isFileReady,
-    listFiles,
+    get_user_input,
+    is_file_ready,
+    list_files,
     mtuci,
     r,
-    readFile,
-    writeToFile,
+    read_file,
+    write_to_file,
 )
 
 MIN_DISC_SPACE = 0.5
 DEFAULT_FILE_NAME = "example.txt"
 
 
-def createFile(fileName: str) -> bool:
-    status = isFileReady(fileName)
+def create_file(file_name: str) -> bool:
+    status = is_file_ready(file_name)
     if (status == PERMISSION_ERROR):
         print(f"{r("Ошибка доступа")}")
         return False
 
     if (status == FILE_IS_NOT_EXISTS):
-        print(f"Файл '{r(fileName)}' не существует")
-        createNewFile = getUserInput(
-            f"Создать новый файл '{fileName}' ({r("y/n")}, default: {r("y")}): ",
+        print(f"Файл '{r(file_name)}' не существует")
+        create_new_file = get_user_input(
+            f"Создать новый файл '{file_name}' ({r("y/n")}, default: {r("y")}): ",
             "[YyNn]",
             "y"
         )
-        # clearOutput()
 
-        if (createNewFile.lower() == "y"):
-            writeToFile(fileName, "")
+        if (create_new_file.lower() == "y"):
+            write_to_file(file_name, "")
             return True
 
         return False
@@ -42,15 +41,15 @@ def createFile(fileName: str) -> bool:
 
 def header() -> str:
     print("")
-    freeSpace = currentFreeSpace()
-    if (freeSpace < MIN_DISC_SPACE):
+    free_space = current_free_space()
+    if (free_space < MIN_DISC_SPACE):
         print(f"{r("ПРЕДУПРЕЖДЕНИЕ!!! Не хватает места на диске!!!")}\n")
 
-    print(f"{r(freeSpace)} GB: Свободного места на диске\n")
+    print(f"{r(free_space)} GB: Свободного места на диске\n")
     print("Создание и чтение файлов\n")
 
 
-def quest(fileName: str) -> bool:
+def quest(file_name: str) -> bool:
     print(f"\nВыбрать действие: {r("1-6")} (default: {r(1)})")
     print(f"{r(1)}: Прочитать весь файл")
     print(f"{r(2)}: Прочитать файл построчно")
@@ -58,14 +57,14 @@ def quest(fileName: str) -> bool:
     print(f"{r(4)}: Выбрать другой файл")
     print(f"{r(5)}: Проверить Exception")
     print(f"{r(6)}: Выйти из программы")
-    action = getUserInput(" : ", "[123456]", "1")
+    action = get_user_input(" : ", "[123456]", "1")
 
     if (action == "1"):
-        readFile(fileName)
+        read_file(file_name)
         return True
 
     if (action == "2"):
-        readFile(fileName, False)
+        read_file(file_name, False)
         return True
 
     if (action == "3"):
@@ -73,27 +72,27 @@ def quest(fileName: str) -> bool:
         print(f"{r(1)}: Перезаписать")
         print(f"{r(2)}: Дозаписать")
 
-        action = getUserInput(" : ", "[12]", "2")
+        action = get_user_input(" : ", "[12]", "2")
 
         if (action == "1"):
             action = "w"
         else:
             action = "a"
 
-        writeToFile(fileName, getUserInput("Строка: ") + "\n", action)
+        write_to_file(file_name, get_user_input("Строка: ") + "\n", action)
 
-        while (getUserInput(
+        while (get_user_input(
             f"Продолжить запись? ({r("y/n")}, default: {r("y")}): ",
             "[YyNn]",
             "y").lower() == "y"
         ):
-            writeToFile(fileName, getUserInput("Строка: ") + "\n", action)
+            write_to_file(file_name, get_user_input("Строка: ") + "\n", action)
         return True
 
     if (action == "5"):
         print("")
         try:
-            with open(fileName, 'r') as file:
+            with open(file_name, 'r') as file:
                 content = file.read()
                 print(content)
 
@@ -110,41 +109,41 @@ def quest(fileName: str) -> bool:
 def start():
     header()
 
-    fileList = listFiles(__file__)
+    file_list = list_files(__file__)
 
-    fileName = getUserInput(
+    file_name = get_user_input(
         f"Введите имя файла или его номер (default: {r(DEFAULT_FILE_NAME)}): "
     )
 
-    if (equils(fileName, "[0-9]+") and len(fileName) > 0):
-        index = int(fileName)
-        if (index < 0 or index > len(fileList)):
+    if (equils(file_name, "[0-9]+") and len(file_name) > 0):
+        index = int(file_name)
+        if (index < 0 or index > len(file_list)):
             print("Файл не найден")
             return start()
-        fileName = fileList[int(index) - 1]
+        file_name = file_list[int(index) - 1]
 
-    if (fileName == ""):
-        fileName = DEFAULT_FILE_NAME
+    if (file_name == ""):
+        file_name = DEFAULT_FILE_NAME
 
-    while (isFileReady(fileName) < 1):
-        if (not (createFile(fileName))):
+    while (is_file_ready(file_name) < 1):
+        if (not (create_file(file_name))):
             return
 
-    print(f"\nВыбран файл: '{r(fileName)}'")
+    print(f"\nВыбран файл: '{r(file_name)}'")
 
-    if (not (quest(fileName))):
+    if (not (quest(file_name))):
         start()
         return
 
-    while ((result := getUserInput(
-        f"Продолжить работу с файлом '{r(fileName)}'? ({r("y/n")}, default: {r("y")}): ",
+    while ((result := get_user_input(
+        f"Продолжить работу с файлом '{r(file_name)}'? ({r("y/n")}, default: {r("y")}): ",
         "[YyNn]",
         "y").lower()) == "y",
     ):
         if (result == "n"):
             break
 
-        if (not (quest(fileName))):
+        if (not (quest(file_name))):
             start()
             return
 
@@ -155,7 +154,7 @@ def main():
     print(f"Лабораторная работа {r("№3")}")
     start()
 
-    while (getUserInput(
+    while (get_user_input(
         f"Выйти из программы? ({r("y/n")}, default: {r("n")}): ",
         "[YyNn]",
         "n"

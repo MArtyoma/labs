@@ -37,18 +37,18 @@ def mtuci():
     print(f"{ENDC}")
 
 
-def mInput(val) -> str:
-    uInput = ""
+def m_input(val) -> str:
+    u_input = ""
     try:
-        uInput = input(val)
+        u_input = input(val)
     except KeyboardInterrupt:
         print("\nВыход из программы\n")
         quit()
 
-    return uInput
+    return u_input
 
 
-def clearOutput(lines=1):
+def clear_output(lines=1):
     for i in range(0, lines):
         print(CURSOR_UP_ONE + ERASE_LINE, end="")
 
@@ -57,27 +57,27 @@ def r(string: str) -> str:
     return f"{OKBLUE}{string}{ENDC}"
 
 
-def isWritable(fileName: str):
-    return os.access(fileName, os.R_OK)
+def is_writable(file_name: str):
+    return os.access(file_name, os.R_OK)
 
 
-def isFileExists(fileName: str):
-    eFile = Path(os.path.join(getCurrentDir(), fileName))
+def is_file_exists(file_name: str):
+    e_file = Path(os.path.join(get_current_dir(), file_name))
 
-    return eFile.is_file()
+    return e_file.is_file()
 
 
-def isFileReady(fileName: str) -> int:
-    if (isFileExists(fileName) and not (isWritable(fileName))):
+def is_file_ready(file_name: str) -> int:
+    if (is_file_exists(file_name) and not (is_writable(file_name))):
         return PERMISSION_ERROR
 
-    if (not (isFileExists(fileName))):
+    if (not (is_file_exists(file_name))):
         return FILE_IS_NOT_EXISTS
 
     return 1
 
 
-def getFreeSpace(dirname: str, size=GB, precision=4) -> float:
+def get_free_space(dirname: str, size=GB, precision=4) -> float:
     if platform.system() == 'Windows':
         free_bytes = ctypes.c_ulonglong(0)
         ctypes.windll.kernel32.GetDiskFreeSpaceExW(
@@ -92,35 +92,35 @@ def getFreeSpace(dirname: str, size=GB, precision=4) -> float:
         return round(st.f_bavail * st.f_frsize / size, precision)
 
 
-def currentFreeSpace() -> float:
-    return getFreeSpace(getCurrentDir())
+def current_free_space() -> float:
+    return get_free_space(get_current_dir())
 
 
-def getCurrentDir() -> str:
+def get_current_dir() -> str:
     return os.path.dirname(os.path.realpath(__file__))
 
 
-def writeToFile(fileName: str, content: str, action="w") -> bool:
-    if (isFileReady(fileName) == PERMISSION_ERROR):
-        print(f"Ошибка доступа к файлу '{r(fileName)}'")
+def write_to_file(file_name: str, content: str, action="w") -> bool:
+    if (is_file_ready(file_name) == PERMISSION_ERROR):
+        print(f"Ошибка доступа к файлу '{r(file_name)}'")
         return False
 
-    with open(fileName, action) as file:
+    with open(file_name, action) as file:
         file.write(content)
         print(content, end="")
 
     return True
 
 
-def getCurrentFile(fileName=__file__) -> str:
-    return os.path.basename(fileName)
+def get_current_file(file_name=__file__) -> str:
+    return os.path.basename(file_name)
 
 
-def listFiles(exception="") -> list:
-    current = getCurrentFile()
-    exception = getCurrentFile(exception)
+def list_files(exception="") -> list:
+    current = get_current_file()
+    exception = get_current_file(exception)
 
-    path = getCurrentDir()
+    path = get_current_dir()
     files = []
     for f in os.listdir(path):
         if os.path.isfile(os.path.join(path, f)):
@@ -137,35 +137,35 @@ def listFiles(exception="") -> list:
     return files
 
 
-def readFile(fileName: str, readAll=True) -> int:
-    if ((error := isFileReady(fileName)) < 0):
+def read_file(file_name: str, read_all=True) -> int:
+    if ((error := is_file_ready(file_name)) < 0):
         print(f"Ошибка {error}")
         return False
 
-    showAll = False
+    show_all = False
 
     print(f"{r("\n--- НАЧАЛО ФАЙЛА ---")}")
 
-    if (readAll):
-        with open(fileName, 'r') as file:
+    if (read_all):
+        with open(file_name, 'r') as file:
             content = file.read()
             print(content, end="")
 
             print(f"{r("--- КОНЕЦ ФАЙЛА ---")}")
             return True
 
-    with open(fileName, 'r') as file:
+    with open(file_name, 'r') as file:
         for line in file:
             print(line, end="")
-            if (not (showAll)):
-                uInput = mInput(
+            if (not (show_all)):
+                u_input = m_input(
                     f"{r("Enter")}: следующая строка, {r("q")}: выйти, {r("r")}: вывести весь файл: "
                 )
-                clearOutput()
-            if (uInput == "q"):
+                clear_output()
+            if (u_input == "q"):
                 break
-            if (uInput == "r"):
-                showAll = True
+            if (u_input == "r"):
+                show_all = True
 
     print(f"{r("--- КОНЕЦ ФАЙЛА ---")}")
 
@@ -173,24 +173,24 @@ def readFile(fileName: str, readAll=True) -> int:
 
 
 def equils(string, rex):
-    rexInput = " ".join(re.findall(rex, string))
-    return len(rexInput.strip()) == len(string.strip())
+    rex_input = " ".join(re.findall(rex, string))
+    return len(rex_input.strip()) == len(string.strip())
 
 
-def getUserInput(
+def get_user_input(
         msg="",
         rex="[0-9a-zA-Zа-яА-Я ._-]{0,128}",
-        defaultValue="",
-        errorMsg="Ошибка ввода",
+        default_value="",
+        error_msg="Ошибка ввода",
 ) -> str:
-    while not (equils(uInput := str(mInput(msg)), rex)):
-        print(errorMsg)
+    while not (equils(u_input := str(m_input(msg)), rex)):
+        print(error_msg)
 
-    if (uInput.strip() == ""):
-        clearOutput()
+    if (u_input.strip() == ""):
+        clear_output()
 
-        return defaultValue
+        return default_value
 
-    clearOutput()
+    clear_output()
 
-    return uInput
+    return u_input

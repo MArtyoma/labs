@@ -1,13 +1,13 @@
 import re
 
 
-def getAge() -> "bool, int":
+def get_age() -> "bool, int":
     try:
-        userInput = input("Введите возраст: ")
-        number: int = int(userInput)
+        user_input = input("Введите возраст: ")
+        number: int = int(user_input)
 
     except Exception:
-        print(f"Ошибка ввода: {userInput}")
+        print(f"Ошибка ввода: {user_input}")
         return False, 0
 
     if (number < 0 or number > 150):
@@ -17,7 +17,7 @@ def getAge() -> "bool, int":
     return True, number
 
 
-def getName():
+def get_name():
     name = str(input("Введите Ваше имя: "))
 
     while len(name) < 2:
@@ -39,15 +39,15 @@ def getName():
 
 
 def main() -> bool:
-    result, age = getAge()
+    result, age = get_age()
 
     while not (result):
-        result, age = getAge()
+        result, age = get_age()
 
-    result, name = getName()
+    result, name = get_name()
 
     while not (result):
-        result, name = getName()
+        result, name = get_name()
 
     print(f"Ваше имя: {name}, Ваш возраст: {age}")
 

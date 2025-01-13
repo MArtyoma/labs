@@ -1,10 +1,10 @@
-def getNumber() -> "bool, float":
+def get_number() -> "bool, float":
     try:
-        userInput = input("Введите число: ")
-        number: float = float(userInput)
+        user_input = input("Введите число: ")
+        number: float = float(user_input)
 
     except Exception:
-        print(f"Ошибка ввода, введите число: {userInput}")
+        print(f"Ошибка ввода, введите число: {user_input}")
         return False, 0
 
     return True, number
@@ -15,14 +15,14 @@ def square(number) -> float:
 
 
 def main() -> bool:
-    result, number = getNumber()
+    result, number = get_number()
 
     while not (result):
-        result, number = getNumber()
+        result, number = get_number()
 
-    squaredNumber = round(square(number), 8)
+    squared_number = round(square(number), 8)
 
-    print(f"Квадрат числа {number} равен: {squaredNumber}")
+    print(f"Квадрат числа {number} равен: {squared_number}")
 
     return True
 

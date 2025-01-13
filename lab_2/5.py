@@ -1,43 +1,45 @@
-def getNumber() -> "bool, int":
+def get_number() -> "bool, int":
     try:
-        userInput = input("Введите число: ")
-        number: int = int(userInput)
+        user_input = input("Введите число: ")
+        number: int = int(user_input)
 
     except Exception:
-        print(f"Ошибка ввода, введите число: {userInput}")
+        print(f"Ошибка ввода, введите число: {user_input}")
         return False, 0
 
     if (number < 2):
-        print(f"Число должно быть больше 1: {userInput}")
+        print(f"Число должно быть больше 1: {user_input}")
         return False, 0
 
     return True, number
 
 
 def is_prime(number: int):
-    delCount = 0
+    del_count = 0
 
     num = abs(number)
 
     if num == 1:
         return False
 
-    for i in range(2, num + 1):
+    max = num // 2 + 1
+
+    for i in range(2, max):
         if (num % i == 0):
             print(f"Делитель: {i}")
-            delCount += 1
+            del_count += 1
 
-    if (delCount == 2):
+    if (del_count == 0):
         return True
 
     return False
 
 
 def main() -> bool:
-    result, number = getNumber()
+    result, number = get_number()
 
     while not (result):
-        result, number = getNumber()
+        result, number = get_number()
 
     print(f"Число {number}")
     if (is_prime(number)):
