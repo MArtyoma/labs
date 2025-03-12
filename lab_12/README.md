@@ -73,6 +73,12 @@ SELECT shop_id, AVG(salary) as avg_salary
 FROM worker 
 GROUP BY shop_id 
 ORDER BY avg_salary;
+
+SELECT shop.name, AVG(salary) as avg_salary 
+FROM worker 
+LEFT JOIN shop ON shop.id = worker.shop_id
+GROUP BY shop_id 
+ORDER BY avg_salary;
 ```
 
 3. **Найти максимальную и минимальную зарплату среди сотрудников каждого магазина:**
@@ -80,12 +86,23 @@ ORDER BY avg_salary;
 SELECT shop_id, MAX(salary) as max_salary, MIN(salary) as min_salary 
 FROM worker 
 GROUP BY shop_id;
+
+SELECT shop.name, MAX(salary) as max_salary, MIN(salary) as min_salary 
+FROM worker 
+LEFT JOIN shop ON shop.id = worker.shop_id
+GROUP BY shop_id;
 ```
 
 4. **Подсчитать количество сотрудников в каждом магазине и отсортировать по количеству в порядке убывания:**
 ```sql
 SELECT shop_id, COUNT(*) as employee_count 
 FROM worker 
+GROUP BY shop_id 
+ORDER BY employee_count DESC;
+
+SELECT shop.name, count(*) as employee_count 
+FROM worker 
+LEFT JOIN shop ON shop.id = worker.shop_id
 GROUP BY shop_id 
 ORDER BY employee_count DESC;
 ```
