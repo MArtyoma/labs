@@ -1,0 +1,13 @@
+services:
+  lab12:
+    container_name: lab12
+    image: worker
+    restart: unless-stopped
+    ports:
+      - "10100:10100"
+    volumes:
+      - ${PWD}/:/app
+    environment:
+      - NODE_ENV=dev
+    command: "npm run dev"
+

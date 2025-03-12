@@ -1,0 +1,23 @@
+{
+  "name": "lab_12",
+  "version": "1.0.0",
+  "description": "Целью данной лабораторной работы является изучение и применение операторов сортировки (ORDER BY) и группировки (GROUP BY), а также агрегатных функций в SQL для анализа данных.",
+  "main": "./build/index.js",
+  "scripts": {
+    "dev": "tsc -w & nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^9.6.0"
+  },
+  "dependencies": {
+    "@types/node": "^22.13.10",
+    "nodemon": "^3.1.9",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "typescript": "^5.8.2"
+  }
+}
