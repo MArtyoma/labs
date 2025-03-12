@@ -104,6 +104,7 @@ SELECT shop.name, count(*) as employee_count
 FROM worker 
 LEFT JOIN shop ON shop.id = worker.shop_id
 GROUP BY shop_id 
+HAVING employee_count > 5
 ORDER BY employee_count DESC;
 ```
 
