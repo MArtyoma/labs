@@ -1,0 +1,9 @@
+_minted
+# *.tex
+*.bcf
+*.out
+*.xml
+*.toc
+*.aux
+**/*.class
+**/.tmp
