@@ -9,6 +9,16 @@ public class Primes {
     Long number = 1L;
     Scanner scanner = new Scanner(System.in);
 
+    for (int i = 1; i <= 100; i++) {
+      boolean result = isPrime(i, 10);
+
+      if (result) {
+        System.out.println(i + " - оно простое\n");
+      } else {
+        System.out.println(i + " - оно НЕ простое\n");
+      }
+    }
+
     while (number > 0L) {
       System.out.print("Введите число: ");
 
@@ -35,12 +45,12 @@ public class Primes {
   /**
    * Проверяет, является ли число простым с помощью теста Миллера-Рабина
    * 
-   * @param number     проверяемое число
+   * @param number проверяемое число
    * @param iterations количество итераций (точность теста)
    * @return true, если число вероятно простое, false если составное
    */
   public static boolean isPrime(long number, int iterations) {
-    if (number <= 1 || (number & 1) == 0) {
+    if (number <= 2) {
       return number == 2;
     }
     if (number == 3) {
