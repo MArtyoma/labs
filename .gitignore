@@ -169,3 +169,14 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+**/_minted
+**/_markdown_main
+# *.tex
+**/*.bcf
+**/*.out
+**/*.xml
+**/*.toc
+**/*.aux
+**/*.class
+**/.tmp
