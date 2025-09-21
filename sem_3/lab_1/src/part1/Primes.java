@@ -13,11 +13,10 @@ public class Primes {
       boolean result = isPrime(i, 10);
 
       if (result) {
-        System.out.println(i + " - оно простое\n");
-      } else {
-        System.out.println(i + " - оно НЕ простое\n");
+        System.out.print(i + " ");
       }
     }
+    System.out.println("");
 
     while (number > 0L) {
       System.out.print("Введите число: ");
