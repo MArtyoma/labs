@@ -1,0 +1,93 @@
+\chapter{Теоретические сведения}
+% \label{ch:Task1}
+
+
+Хеш-таблицы являются одной из наиболее эффективных структур данных для быстрого поиска, добавления и удаления элементов. В Java они реализованы в классах \texttt{Hashtable} и \texttt{HashMap}.
+
+\section{Основные концепции}
+
+\subsection{Принцип работы}
+Хеш-таблица представляет собой структуру данных, которая хранит пары ключ-значение. Для определения позиции элемента используется хеш-функция.
+
+\subsection{Хеш-функция}
+Хеш-функция преобразует ключ в числовой индекс массива. Формально:
+
+\begin{equation}
+f: K \rightarrow \{0, 1, ..., N-1\}
+\end{equation}
+
+где $K$ — множество ключей, $N$ — размер таблицы.
+
+\section{Структура хеш-таблицы}
+
+Хеш-таблица состоит из:
+\begin{itemize}
+    \item Массива бакетов (корзин)
+    \item Механизма разрешения коллизий
+    \item Хеш-функции
+\end{itemize}
+
+\section{Разрешение коллизий}
+Коллизия возникает, когда разные ключи имеют одинаковый хеш-код. В Java используется метод цепочек:
+
+\begin{minted}{java}
+public class Hashtable<K, V> {
+    private Entry<K, V>[] table;
+    
+    private static class Entry<K, V> {
+        final K key;
+        V value;
+        Entry<K, V> next;
+        
+        Entry(K key, V value, Entry<K, V> next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+    }
+}
+\end{minted}
+
+\section{Основные операции}
+
+\subsection{Добавление элемента}
+\begin{minted}{java}
+public void put(K key, V value) {
+    int hash = hash(key);
+    int index = indexFor(hash, table.length);
+    
+    for (Entry<K, V> e = table[index]; e != null; e = e.next) {
+        if (e.hash == hash && (e.key == key || key.equals(e.key))) {
+            e.value = value;
+            return;
+        }
+    }
+    table[index] = new Entry<>(key, value, table[index]);
+}
+\end{minted}
+
+\subsection{Поиск элемента}
+\begin{minted}{java}
+public V get(Object key) {
+    int hash = hash(key);
+    int index = indexFor(hash, table.length);
+    
+    for (Entry<K, V> e = table[index]; e != null; e = e.next) {
+        if (e.hash == hash && (e.key == key || key.equals(e.key))) {
+            return e.value;
+        }
+    }
+    return null;
+}
+\end{minted}
+
+\section{Характеристики производительности}
+\begin{itemize}
+    \item Средняя сложность операций: $O(1)$
+    \item В худшем случае: $O(n)$ (при большом количестве коллизий)
+\end{itemize}
+
+\section{Заключение}
+Хеш-таблицы являются мощным инструментом для работы с данными в Java, обеспечивая быстрый доступ и эффективное использование памяти при правильном использовании.
+
+\endinput

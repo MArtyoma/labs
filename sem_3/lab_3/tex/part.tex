@@ -1,0 +1,284 @@
+\chapter{Реализация}
+% \label{ch:Task1}
+
+\section{Создание вспомогательного класса для хранения типа данных в хэш-таблице}
+
+\inputminted{java}{../src/Entry.java}
+
+Класс \textbf{Entry} представляет собой вспомогательный класс-обёртку для хранения пар ключ-значение в хэш-таблице. Данный класс является универсальным (generic) и может работать с любыми типами данных для ключа и значения.
+
+\subsection{Назначение}
+
+Класс предназначен для:
+\begin{itemize}
+    \item Хранения пары ключ-значение
+    \item Использования в структурах данных на основе хэширования
+    \item Обеспечения инкапсуляции данных
+    \item Поддержки типизации через дженерики
+\end{itemize}
+
+\subsection{Структура класса}
+
+\subsubsection{Параметры типа}
+\begin{itemize}
+    \item \textbf{K} - тип ключа (Key)
+    \item \textbf{V} - тип значения (Value)
+\end{itemize}
+
+\subsubsection{Поля класса}
+\begin{itemize}
+    \item \textbf{key} - приватное поле для хранения ключа типа K
+    \item \textbf{value} - приватное поле для хранения значения типа V
+\end{itemize}
+
+\subsubsection{Конструктор}
+
+\begin{minted}{java}
+public Entry(K key, V value)
+\end{minted}
+\begin{itemize}
+    \item Принимает два параметра: ключ и значение
+    \item Инициализирует соответствующие поля объекта
+\end{itemize}
+
+\subsubsection{Методы доступа}
+
+\begin{minted}{java}
+public K getKey()
+\end{minted}
+\begin{itemize}
+    \item Возвращает сохранённый ключ
+    \item Обеспечивает доступ только для чтения
+\end{itemize}
+
+\begin{minted}{java}
+public V getValue()
+\end{minted}
+\begin{itemize}
+    \item Возвращает сохранённое значение
+    \item Обеспечивает доступ только для чтения
+\end{itemize}
+
+\begin{minted}{java}
+public void setValue(V value)
+\end{minted}
+\begin{itemize}
+    \item Позволяет изменить значение
+    \item Сохраняет новое значение в поле value
+\end{itemize}
+
+\subsection{Особенности реализации}
+\begin{itemize}
+    \item Класс использует инкапсуляцию для защиты данных
+    \item Все поля являются приватными
+    \item Предоставляет контролируемый доступ через публичные методы
+    \item Поддерживает работу с любыми типами данных благодаря дженерикам
+\end{itemize}
+
+\subsection{Пример использования}
+\begin{minted}{java}
+Entry<String, Integer> entry = new Entry<>("name", 42);
+String key = entry.getKey(); // Получаем ключ
+Integer value = entry.getValue(); // Получаем значение
+entry.setValue(100); // Изменяем значение
+\end{minted}
+
+Данный класс является базовым строительным блоком для реализации более сложных структур данных, таких как HashMap, HashTable и других хэш-ориентированных коллекций.
+
+\section{Создание класса для хранения данных о продукте}
+
+% --- 
+
+\inputminted{java}{../src/Product.java}
+
+Класс \textbf{Product} представляет собой сущность для хранения информации о товаре. Класс содержит основные характеристики продукта: название, цену и количество.
+
+\subsection{Назначение}
+
+Класс предназначен для:
+\begin{itemize}
+    \item Хранения информации о товарах
+    \item Обеспечения инкапсуляции данных
+    \item Предоставления методов доступа к полям
+    \item Форматированного вывода информации о товаре
+\end{itemize}
+
+\subsection{Структура класса}
+
+\subsubsection{Поля класса}
+\begin{itemize}
+    \item \textbf{name} - приватное поле типа String для хранения названия товара
+    \item \textbf{price} - приватное поле типа double для хранения цены
+    \item \textbf{quantity} - приватное поле типа int для хранения количества товара
+\end{itemize}
+
+\subsubsection{Конструктор}
+\begin{minted}{java}
+public Product(String name, double price, int quantity)
+\end{minted}
+\begin{itemize}
+    \item Инициализирует все поля объекта
+    \item Принимает параметры для установки начальных значений
+\end{itemize}
+
+\subsubsection{Геттеры и сеттеры}
+
+Для каждого поля определены методы доступа:
+
+\begin{minted}{java}
+public String getName()
+public void setName(String name)
+\end{minted}
+
+\begin{minted}{java}
+public double getPrice()
+public void setPrice(double price)
+\end{minted}
+
+\begin{minted}{java}
+public int getQuantity()
+public void setQuantity(int quantity)
+\end{minted}
+
+\subsubsection{Метод toString}
+
+\begin{minted}{java}
+@Override
+public String toString() {
+    return "Product{name='" + name + "', price=" + price + ", quantity=" + quantity + "}";
+}
+\end{minted}
+
+Предоставляет строковое представление объекта в формате:
+\texttt{Product\{name='название', price=цена, quantity=количество\}}
+
+\subsection{Особенности реализации}
+\begin{itemize}
+    \item Полная инкапсуляция данных
+    \item Контроль доступа через геттеры и сеттеры
+    \item Корректное строковое представление объекта
+    \item Простота расширения функциональности
+\end{itemize}
+
+\subsection{Пример использования}
+\begin{minted}{java}
+Product product = new Product("Смартфон", 29999.99, 10);
+String name = product.getName();
+double price = product.getPrice();
+int quantity = product.getQuantity();
+
+System.out.println(product);
+// Выведет: Product{name='Смартфон', price=29999.99, quantity=10}
+\end{minted}
+
+% --- 
+
+\section{Создание класса HashTable}
+
+\inputminted{java}{../src/HashTable.java}
+
+Класс \textbf{HashTable} представляет собой реализацию хэш-таблицы с использованием обобщенных типов (generics). Хэш-таблица хранит пары ключ-значение и использует связанные списки для разрешения коллизий.
+
+\subsection{Назначение}
+
+Класс предназначен для:
+\begin{itemize}
+    \item Хранения пар ключ-значение
+    \item Обеспечения быстрого доступа к данным по ключу
+    \item Управления коллекцией элементов с помощью хэширования
+    \item Разрешения коллизий через связанные списки
+\end{itemize}
+
+\subsection{Структура класса}
+
+\subsubsection{Параметры типа}
+\begin{itemize}
+    \item \textbf{K} - тип ключа
+    \item \textbf{V} - тип значения
+\end{itemize}
+
+\subsubsection{Поля класса}
+\begin{itemize}
+    \item \textbf{DEFAULT\_CAPACITY} - константа, задающая начальную емкость таблицы
+    \item \textbf{table} - массив связанных списков для хранения элементов
+    \item \textbf{size} - количество элементов в таблице
+\end{itemize}
+
+\subsubsection{Конструкторы}
+
+\begin{minted}{java}
+public HashTable()
+\end{minted}
+Создает таблицу с емкостью по умолчанию (16)
+
+\begin{minted}{java}
+public HashTable(int capacity)
+\end{minted}
+Создает таблицу с заданной емкостью
+
+\subsubsection{Основные методы}
+
+\paragraph{Хэширование}
+\begin{minted}{java}
+private int hash(K key)
+\end{minted}
+Вычисляет индекс для заданного ключа
+
+\paragraph{Добавление элемента}
+\begin{minted}{java}
+public void put(K key, V value)
+\end{minted}
+Добавляет или обновляет элемент в таблице
+
+\paragraph{Получение элемента}
+\begin{minted}{java}
+public V get(K key)
+\end{minted}
+Возвращает значение по заданному ключу
+
+\paragraph{Удаление элемента}
+\begin{minted}{java}
+public V remove(K key)
+\end{minted}
+Удаляет элемент по заданному ключу и возвращает его значение
+
+\subsubsection{Вспомогательные методы}
+\begin{itemize}
+    \item \textbf{size()} - возвращает количество элементов
+    \item \textbf{isEmpty()} - проверяет пустоту таблицы
+    \item \textbf{printTable()} - выводит содержимое таблицы
+\end{itemize}
+
+\subsection{Особенности реализации}
+\begin{itemize}
+    \item Использование обобщенных типов для гибкости
+    \item Разрешение коллизий через связанные списки
+    \item Инкапсуляция данных
+    \item Контроль размера коллекции
+    \item Возможность вывода содержимого таблицы
+\end{itemize}
+
+\subsection{Пример использования}
+\begin{minted}{java}
+HashTable<String, Integer> table = new HashTable<>();
+table.put("key1", 10);
+table.put("key2", 20);
+
+Integer value = table.get("key1"); // Получаем значение
+table.remove("key2"); // Удаляем элемент
+
+table.printTable(); // Выводим содержимое таблицы
+\end{minted}
+
+\subsection{Применение}
+Класс может использоваться в различных приложениях, где требуется:
+\begin{itemize}
+    \item Быстрый доступ к данным по ключу
+    \textbf{Хранение пар ключ-значение}
+    \item Реализация кэширования данных
+    \item Создание ассоциативных массивов
+    \item Обработка больших объемов данных
+\end{itemize}
+
+\endinput
+

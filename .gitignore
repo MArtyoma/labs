@@ -180,3 +180,5 @@ cython_debug/
 **/*.aux
 **/*.class
 **/.tmp
+**/help.tex
+**/*.lua
