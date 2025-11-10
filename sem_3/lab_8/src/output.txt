@@ -1,0 +1,10 @@
+banana
+elephant
+APPLE
+BANANA
+CAT
+ELEPHANT
+PROCESSED: apple
+PROCESSED: banana
+PROCESSED: cat
+PROCESSED: elephant

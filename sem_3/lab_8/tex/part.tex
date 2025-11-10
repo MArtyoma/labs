@@ -1,0 +1,41 @@
+\chapter{Реализация}
+% \label{ch:Task1}
+
+\section{Создание пользовательской аннотации}
+
+Разработаем аннотацию \texttt{@DataProcessor} для маркировки методов обработки данных:
+
+\inputminted{java}{../src/DataProcessor.java}
+
+Данная аннотация обладает следующими характеристиками:
+\begin{itemize}
+    \item \texttt{@Retention(RetentionPolicy.RUNTIME)} - аннотация доступна во время выполнения
+    \item \texttt{@Target(ElementType.METHOD)} - может применяться только к методам
+    \item Содержит элементы \texttt{name} и \texttt{priority} со значениями по умолчанию
+\end{itemize}
+
+\section{Реализация класса DataManager}
+
+Класс \texttt{DataManager} отвечает за координацию процесса обработки данных:
+
+\inputminted{java}{../src/DataManager.java}
+
+\section{Реализация обработчиков данных}
+
+Создадим три различных обработчика данных, помеченных аннотацией \texttt{@DataProcessor}:
+
+\inputminted{java}{../src/LengthFilter.java}
+
+\inputminted{java}{../src/PrefixAdder.java}
+
+\inputminted{java}{../src/UpperCaseTransformer.java}
+
+\section{Тестирование приложения}
+
+Создадим основной класс для тестирования функциональности:
+
+\inputminted{java}{../src/Main.java}
+
+\endinput
+
+

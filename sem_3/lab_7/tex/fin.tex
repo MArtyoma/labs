@@ -1,0 +1,217 @@
+\chapter{Вывод}
+% \label{ch:Task1}
+
+В ходе выполнения лабораторной работы были изучены и практически применены основные концепции многопоточного программирования в Java. Особое внимание было уделено современному подходу с использованием CompletableFuture, который предоставляет мощные средства для асинхронного программирования.
+
+Основные достижения:
+\begin{itemize}
+    \item Освоены принципы создания и управления асинхронными задачами
+    \item Изучены механизмы комбинации и цепочек асинхронных операций
+    \item Получен практический опыт решения типовых задач параллельных вычислений
+    \item Изучены преимущества CompletableFuture по сравнению с традиционными подходами к многопоточности
+\end{itemize}
+
+CompletableFuture демонстрирует значительные преимущества в читаемости кода, простоте комбинации асинхронных операций и гибкости управления параллельными вычислениями, что делает его предпочтительным выбором для современных многопоточных приложений на Java.
+
+\section*{Ответы на контрольные вопросы}
+
+\begin{enumerate}
+    \item \textbf{Как реализуется многопоточность в Java?}
+    
+    Многопоточность в Java реализуется с помощью следующих основных механизмов:
+    \begin{itemize}
+        \item Наследование от класса \texttt{Thread} и переопределение метода \texttt{run()}
+        \item Реализация интерфейса \texttt{Runnable} и передача экземпляра в конструктор \texttt{Thread}
+        \item Использование интерфейса \texttt{Callable} для задач, возвращающих результат
+        \item Применение \texttt{ExecutorService} и пулов потоков для управления выполнением задач
+        \item Использование \texttt{CompletableFuture} для асинхронного программирования
+        \item Фреймворк \texttt{ForkJoinPool} для рекурсивного разделения задач
+    \end{itemize}
+
+    \item \textbf{Что такое поток?}
+    
+    Поток (thread) — это легковесный процесс выполнения в рамках программы Java. Каждый поток имеет:
+    \begin{itemize}
+        \item Собственный стек вызовов
+        \item Программный счетчик
+        \item Локальные переменные
+        \item Доступ к общей куче (heap) процесса
+    \end{itemize}
+    Потоки позволяют выполнять несколько задач параллельно, эффективно используя ресурсы процессора.
+
+    \item \textbf{Для чего нужно ключевое слово synchronized?}
+    
+    Ключевое слово \texttt{synchronized} используется для:
+    \begin{itemize}
+        \item Создания критических секций — блоков кода, которые могут выполняться только одним потоком одновременно
+        \item Обеспечения атомарности операций над общими ресурсами
+        \item Предотвращения состояний гонки (race condition)
+        \item Гарантии видимости изменений между потоками (обеспечение happens-before отношения)
+    \end{itemize}
+
+    \item \textbf{Для чего нужно ключевое слово volatile?}
+    
+    Ключевое слово \texttt{volatile} обеспечивает:
+    \begin{itemize}
+        \item Видимость изменений переменной для всех потоков
+        \item Запрет переупорядочивания операций компилятором и процессором
+        \item Гарантию того, что чтение переменной всегда возвращает самое актуальное значение
+    \end{itemize}
+    Однако \texttt{volatile} не гарантирует атомарность составных операций.
+
+    \item \textbf{Зачем нужно синхронизировать потоки?}
+    
+    Синхронизация потоков необходима для:
+    \begin{itemize}
+        \item Предотвращения race condition при доступе к общим ресурсам
+        \item Обеспечения консистентности данных
+        \item Избежания частично записанных или прочитанных состояний
+        \item Реализации корректного межпоточного взаимодействия
+        \item Соблюдения инвариантов многопоточных программ
+    \end{itemize}
+
+    \item \textbf{Какие есть способы синхронизации потоков?}
+    
+    Основные способы синхронизации:
+    \begin{itemize}
+        \item \texttt{synchronized} методы и блоки
+        \item \texttt{volatile} переменные
+        \item Классы из пакета \texttt{java.util.concurrent.locks}: \texttt{ReentrantLock}, \texttt{ReadWriteLock}
+        \item Синхронизаторы: \texttt{Semaphore}, \texttt{CountDownLatch}, \texttt{CyclicBarrier}
+        \item Атомарные классы: \texttt{AtomicInteger}, \texttt{AtomicReference}
+        \item Потокобезопасные коллекции: \texttt{ConcurrentHashMap}, \texttt{CopyOnWriteArrayList}
+    \end{itemize}
+
+    \item \textbf{В чем разница между Thread и Runnable?}
+    
+    Основные различия:
+    \begin{itemize}
+        \item \texttt{Runnable} — это интерфейс, \texttt{Thread} — класс
+        \item \texttt{Runnable} позволяет разделить задачу и механизм выполнения
+        \item При использовании \texttt{Runnable} можно наследовать другой класс
+        \item \texttt{Runnable} более гибкий подход, соответствует принципу композиции
+        \item \texttt{Thread} уже содержит логику управления потоком выполнения
+    \end{itemize}
+
+    \item \textbf{Какие состояния может иметь поток? Опишите жизненный цикл потока.}
+    
+    Жизненный цикл потока включает состояния:
+    \begin{itemize}
+        \item \textbf{NEW} — создан, но не запущен
+        \item \textbf{RUNNABLE} — выполняется или готов к выполнению
+        \item \textbf{BLOCKED} — заблокирован в ожидании монитора
+        \item \textbf{WAITING} — ожидает неограниченное время действия другого потока
+        \item \textbf{TIMED\_WAITING} — ожидает ограниченное время
+        \item \textbf{TERMINATED} — завершил выполнение
+    \end{itemize}
+
+    \item \textbf{Что такое daemon-поток? Как его создать?}
+    
+    Daemon-поток — это фоновый поток, который автоматически завершается когда все не-daemon потоки завершили выполнение. Создание:
+    \begin{minted}{java}
+Thread daemonThread = new Thread(() -> {
+    // логика потока
+});
+daemonThread.setDaemon(true);
+daemonThread.start();
+    \end{minted}
+
+    \item \textbf{Как принудительно остановить поток?}
+    
+    Рекомендуемые способы:
+    \begin{itemize}
+        \item Использовать флаг завершения с \texttt{volatile}
+        \item Вызывать \texttt{interrupt()} и обрабатывать\\
+          \texttt{InterruptedException}
+        \item Не рекомендуется использовать устаревшие \texttt{stop()}, \texttt{suspend()}, \texttt{resume()}
+    \end{itemize}
+    Пример с флагом:
+    \begin{minted}{java}
+public class StoppableThread implements Runnable {
+    private volatile boolean running = true;
+    
+    public void stop() { running = false; }
+    
+    @Override
+    public void run() {
+        while (running) {
+            // полезная работа
+        }
+    }
+}
+    \end{minted}
+
+    \item \textbf{Как работает метод join()? Для чего он используется?}
+    
+    Метод \texttt{join()} приостанавливает выполнение текущего потока до тех пор, пока целевой поток не завершится. Используется для:
+    \begin{itemize}
+        \item Ожидания завершения работы других потоков
+        \item Синхронизации порядка выполнения
+        \item Сбора результатов из нескольких потоков
+    \end{itemize}
+    Пример:
+    \begin{minted}{java}
+Thread worker = new Thread(() -> {
+    // длительная операция
+});
+worker.start();
+worker.join(); // ждем завершения worker
+// продолжаем выполнение
+    \end{minted}
+
+    \item \textbf{Что такое «гонка данных» (race condition)?}
+    
+    Гонка данных — это ошибка проектирования многопоточной системы, когда результат выполнения зависит от порядка планирования потоков. Возникает когда:
+    \begin{itemize}
+        \item Два или более потока обращаются к общим данным
+        \item Хотя бы один поток изменяет данные
+        \item Отсутствует proper synchronization
+    \end{itemize}
+    Пример:
+    \begin{minted}{java}
+public class Counter {
+    private int count = 0;
+    
+    public void increment() {
+        count++; // не атомарная операция!
+    }
+}
+    \end{minted}
+
+    \item \textbf{Что такое deadlock? Как его избежать?}
+    
+    Deadlock (взаимная блокировка) — ситуация, когда два или более потока заблокированы навсегда, ожидая ресурсы, удерживаемые друг другом.
+    
+    Способы избежания:
+    \begin{itemize}
+        \item Упорядочивание захвата блокировок
+        \item Использование \texttt{tryLock()} с таймаутом
+        \item Избегание вложенных блокировок
+        \item Использование thread dump анализа для обнаружения
+        \item Применение deadlock detection алгоритмов
+    \end{itemize}
+
+    \item \textbf{Что такое wait(), notify() и notifyAll()? В каком классе они объявлены?}
+    
+    Эти методы используются для межпоточного взаимодействия:
+    \begin{itemize}
+        \item \texttt{wait()} — освобождает монитор и переводит поток в ожидание
+        \item \texttt{notify()} — пробуждает один случайный поток из ожидающих
+        \item \texttt{notifyAll()} — пробуждает все ожидающие потоки
+    \end{itemize}
+    Объявлены в классе \texttt{Object}, должны вызываться внутри \texttt{synchronized} блока.
+
+    \item \textbf{Что такое ThreadPool? Какие реализации ExecutorService есть в Java?}
+    
+    ThreadPool — это набор заранее созданных потоков, готовых выполнять задачи. Реализации \texttt{ExecutorService}:
+    \begin{itemize}
+        \item \texttt{Executors.newFixedThreadPool()} — фиксированное количество потоков
+        \item \texttt{Executors.newCachedThreadPool()} — пул с возможностью расширения
+        \item \texttt{Executors.newSingleThreadExecutor()} — один поток выполнения
+        \item \texttt{Executors.newScheduledThreadPool()} — пул для планирования задач
+        \item \texttt{ForkJoinPool} — для рекурсивного разделения задач (fork-join)
+        \item \texttt{ThreadPoolExecutor} — расширяемая базовая реализация
+    \end{itemize}
+\end{enumerate}
+
+\endinput

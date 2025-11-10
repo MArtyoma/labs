@@ -1,0 +1,408 @@
+\chapter{Вывод}
+% \label{ch:Task1}
+
+В ходе лабораторной работы были изучены основные интерфейсы и классы коллекций в Java, получены практические навыки работы с дженериками, итераторами и различными типами коллекций. Особое внимание было уделено работе с HashMap для учета продаж в магазине.
+
+\section*{Контрольные вопросы}
+
+\begin{enumerate}
+\item \textbf{Какие интерфейсы коллекций есть в Java?}
+
+Основные интерфейсы коллекций:
+\begin{itemize}
+\item \texttt{Collection} - корневой интерфейс
+\item \texttt{List} - упорядоченные коллекции
+\item \texttt{Set} - коллекции без дубликатов
+\item \texttt{Queue} - коллекции типа очередь
+\item \texttt{Deque} - двусторонние очереди
+\item \texttt{Map} - пары ключ-значение
+\item \texttt{Iterator} и \texttt{Iterable} - для обхода коллекций
+\end{itemize}
+
+\item \textbf{Какие классы коллекций есть в Java?}
+
+Основные реализации:
+\begin{minted}{java}
+// List implementations
+ArrayList<E>, LinkedList<E>, Vector<E>, Stack<E>
+
+// Set implementations  
+HashSet<E>, LinkedHashSet<E>, TreeSet<E>
+
+// Queue implementations
+PriorityQueue<E>, ArrayDeque<E>
+
+// Map implementations
+HashMap<K,V>, LinkedHashMap<K,V>, TreeMap<K,V>, 
+Hashtable<K,V>, ConcurrentHashMap<K,V>
+\end{minted}
+
+\item \textbf{Что такое итератор?}
+
+Итератор - объект для последовательного обхода элементов коллекции:
+
+\begin{minted}{java}
+List<String> list = Arrays.asList("A", "B", "C");
+Iterator<String> iterator = list.iterator();
+
+while (iterator.hasNext()) {
+    String element = iterator.next();
+    System.out.println(element);
+    // iterator.remove(); // удаление текущего элемента
+}
+\end{minted}
+
+\item \textbf{Как работают коллекции на основе интерфейса Map?}
+
+Map хранит пары ключ-значение, ключи уникальны:
+
+\begin{minted}{java}
+Map<String, Integer> map = new HashMap<>();
+map.put("apple", 1);
+map.put("banana", 2);
+
+Integer value = map.get("apple"); // 1
+boolean contains = map.containsKey("banana"); // true
+
+// Обход элементов
+for (Map.Entry<String, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+\end{minted}
+
+\item \textbf{Как работают коллекции на основе интерфейса List?}
+
+List - упорядоченная коллекция с доступом по индексу:
+
+\begin{minted}{java}
+List<String> list = new ArrayList<>();
+list.add("first");
+list.add("second");
+list.add(1, "middle"); // вставка по индексу
+
+String element = list.get(0); // "first"
+int index = list.indexOf("second"); // 2
+
+// Поддерживает дубликаты и null значения
+list.add("first"); // допустимо
+list.add(null); // допустимо
+\end{minted}
+
+\item \textbf{Как работают коллекции на основе интерфейса Set?}
+
+Set - коллекция без дубликатов:
+
+\begin{minted}{java}
+Set<String> set = new HashSet<>();
+set.add("apple");
+set.add("banana");
+set.add("apple"); // не добавится - дубликат
+
+System.out.println(set.size()); // 2
+System.out.println(set.contains("banana")); // true
+
+// TreeSet - отсортированный набор
+Set<Integer> sortedSet = new TreeSet<>();
+sortedSet.add(3);
+sortedSet.add(1);
+sortedSet.add(2);
+// Элементы: [1, 2, 3]
+\end{minted}
+
+\item \textbf{Как можно синхронизировать коллекции в Java?}
+
+\begin{minted}{java}
+// 1. Использование synchronized-методов Collections
+List<String> syncList = Collections.synchronizedList(new ArrayList<>());
+Map<String, Integer> syncMap = Collections.synchronizedMap(new HashMap<>());
+
+// 2. Concurrent коллекции
+ConcurrentHashMap<String, Integer> concurrentMap = new ConcurrentHashMap<>();
+CopyOnWriteArrayList<String> copyOnWriteList = new CopyOnWriteArrayList<>();
+
+// 3. Вектор и Hashtable (устарели)
+Vector<String> vector = new Vector<>();
+Hashtable<String, Integer> hashtable = new Hashtable<>();
+\end{minted}
+
+\item \textbf{Какие методы предоставляет интерфейс Collection?}
+
+Основные методы:
+\begin{minted}{java}
+boolean add(E e)           // добавление элемента
+boolean remove(Object o)   // удаление элемента
+boolean contains(Object o) // проверка наличия
+int size()                 // количество элементов
+boolean isEmpty()          // проверка пустоты
+void clear()               // очистка коллекции
+Iterator<E> iterator()     // получение итератора
+Object[] toArray()         // преобразование в массив
+<T> T[] toArray(T[] a)     // преобразование в типизированный массив
+\end{minted}
+
+\item \textbf{Какие реализации интерфейса List вы знаете?}
+
+\begin{minted}{java}
+// ArrayList - на основе массива, быстрый доступ по индексу
+List<String> arrayList = new ArrayList<>();
+
+// LinkedList - на основе двусвязного списка, быстрая вставка/удаление
+List<String> linkedList = new LinkedList<>();
+
+// Vector - синхронизированный аналог ArrayList (устарел)
+List<String> vector = new Vector<>();
+
+// Stack - LIFO структура на основе Vector
+Stack<String> stack = new Stack<>();
+
+// CopyOnWriteArrayList - потокобезопасный список
+List<String> copyOnWriteList = new CopyOnWriteArrayList<>();
+\end{minted}
+
+\item \textbf{Какие реализации интерфейса Set вы знаете?}
+
+\begin{minted}{java}
+// HashSet - на основе HashMap, не гарантирует порядок
+Set<String> hashSet = new HashSet<>();
+
+// LinkedHashSet - сохраняет порядок вставки
+Set<String> linkedHashSet = new LinkedHashSet<>();
+
+// TreeSet - отсортированный набор на основе TreeMap
+Set<String> treeSet = new TreeSet<>();
+
+// EnumSet - для enum типов
+enum Day { MONDAY, TUESDAY, WEDNESDAY }
+Set<Day> enumSet = EnumSet.allOf(Day.class);
+
+// CopyOnWriteArraySet - потокобезопасный набор
+Set<String> copyOnWriteSet = new CopyOnWriteArraySet<>();
+\end{minted}
+
+\item \textbf{Что такое Comparable и Comparator?}
+
+\begin{minted}{java}
+// Comparable - интерфейс для естественного порядка
+class Person implements Comparable<Person> {
+    private String name;
+    private int age;
+    
+    @Override
+    public int compareTo(Person other) {
+        return this.name.compareTo(other.name);
+    }
+}
+
+// Comparator - для альтернативных способов сортировки
+Comparator<Person> ageComparator = new Comparator<Person>() {
+    @Override
+    public int compare(Person p1, Person p2) {
+        return Integer.compare(p1.getAge(), p2.getAge());
+    }
+};
+
+List<Person> people = new ArrayList<>();
+Collections.sort(people); // использует Comparable
+Collections.sort(people, ageComparator); // использует Comparator
+\end{minted}
+
+\item \textbf{Что такое параметр типа?}
+
+Параметр типа (type parameter) - параметр в объявлении дженерика:
+
+\begin{minted}{java}
+// T - параметр типа
+class Box<T> {
+    private T value;
+    
+    public void setValue(T value) {
+        this.value = value;
+    }
+    
+    public T getValue() {
+        return value;
+    }
+}
+
+// Использование
+Box<String> stringBox = new Box<>(); // String - аргумент типа
+Box<Integer> intBox = new Box<>();   // Integer - аргумент типа
+\end{minted}
+
+\item \textbf{Как параметризовать метод, класс?}
+
+\begin{minted}{java}
+// Параметризованный класс
+class Pair<K, V> {
+    private K key;
+    private V value;
+    
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+
+// Параметризованный метод
+class Utils {
+    public static <T> T getFirstElement(List<T> list) {
+        return list.get(0);
+    }
+    
+    public static <T, U> Pair<T, U> createPair(T first, U second) {
+        return new Pair<>(first, second);
+    }
+}
+
+// Использование
+List<String> strings = Arrays.asList("a", "b", "c");
+String first = Utils.<String>getFirstElement(strings);
+
+Pair<String, Integer> pair = Utils.createPair("age", 25);
+\end{minted}
+
+\item \textbf{Что такое стирание типов?}
+
+Стирание типов (type erasure) - процесс удаления информации о generic-типах во время компиляции:
+
+\begin{minted}{java}
+// Исходный код
+List<String> stringList = new ArrayList<>();
+List<Integer> intList = new ArrayList<>();
+
+// После компиляции (стирания)
+List stringList = new ArrayList(); // raw type
+List intList = new ArrayList();    // raw type
+
+// Информация о типах String и Integer теряется
+\end{minted}
+
+\item \textbf{Как можно обойти ограничения стирания типов?}
+
+\begin{minted}{java}
+// 1. Передача Class объекта для сохранения информации о типе
+class GenericClass<T> {
+    private Class<T> type;
+    
+    public GenericClass(Class<T> type) {
+        this.type = type;
+    }
+    
+    public T createInstance() throws Exception {
+        return type.newInstance();
+    }
+}
+
+// 2. Использование супер-токена (Joshua Bloch)
+abstract class TypeReference<T> {
+    private final Type type;
+    
+    protected TypeReference() {
+        Type superclass = getClass().getGenericSuperclass();
+        this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+    }
+    
+    public Type getType() {
+        return type;
+    }
+}
+
+// 3. Хранение информации в полях (не рекомендуется)
+class Box<T> {
+    private T value;
+    private Class<T> valueClass; // сохраняем информацию о типе
+}
+\end{minted}
+
+\item \textbf{Как работают дженерики с массивами?}
+
+\begin{minted}{java}
+// Создание массива generic-типов НЕ разрешено
+// List<String>[] array = new List<String>[10]; // Ошибка компиляции!
+
+// Но можно создавать массивы raw types
+List[] rawArray = new List[10]; // Допустимо
+rawArray[0] = new ArrayList<String>();
+rawArray[1] = new ArrayList<Integer>();
+
+// Можно использовать коллекции вместо массивов
+List<List<String>> listOfLists = new ArrayList<>();
+
+// Или создавать массивы с unchecked cast
+@SuppressWarnings("unchecked")
+List<String>[] stringLists = new List[10];
+\end{minted}
+
+\item \textbf{Можно ли создать массив дженериков?}
+
+\begin{minted}{java}
+// Прямое создание массива generic-типов НЕВОЗМОЖНО
+// T[] array = new T[10]; // Ошибка компиляции!
+
+// Обходные пути:
+class GenericArray<T> {
+    // 1. Создание массива Object[] и приведение типа
+    @SuppressWarnings("unchecked")
+    public T[] createArray(int size) {
+        return (T[]) new Object[size];
+    }
+    
+    // 2. Использование Array.newInstance() с Class<T>
+    public T[] createArrayWithClass(Class<T> clazz, int size) {
+        return (T[]) java.lang.reflect.Array.newInstance(clazz, size);
+    }
+}
+
+// Использование
+GenericArray<String> ga = new GenericArray<>();
+String[] array1 = ga.createArray(10); // ClassCastException при использовании
+String[] array2 = ga.createArrayWithClass(String.class, 10); // корректно
+\end{minted}
+
+\item \textbf{Что такое wildcard тип?}
+
+Wildcard (подстановочный тип) - неизвестный тип в дженериках:
+
+\begin{minted}{java}
+// ? - неограниченный wildcard
+List<?> unknownList = new ArrayList<String>();
+
+// ? extends Type - верхнее ограничение (producer)
+List<? extends Number> numbers = new ArrayList<Integer>();
+// numbers.add(new Integer(1)); // Ошибка компиляции!
+Number num = numbers.get(0); // Чтение допустимо
+
+// ? super Type - нижнее ограничение (consumer)
+List<? super Integer> integers = new ArrayList<Number>();
+integers.add(new Integer(1)); // Запись допустима
+// Integer i = integers.get(0); // Ошибка компиляции!
+Object obj = integers.get(0); // Чтение как Object допустимо
+\end{minted}
+
+\item \textbf{В чем разница между <? extends T> и <? super T>?}
+
+\begin{minted}{java}
+// PECS - Producer Extends, Consumer Super
+
+// <? extends T> - производитель (producer), только чтение
+List<? extends Number> producer = Arrays.asList(1, 2, 3);
+Number first = producer.get(0); // OK - чтение
+// producer.add(1); // ERROR - запись запрещена
+
+// <? super T> - потребитель (consumer), в основном запись  
+List<? super Integer> consumer = new ArrayList<Number>();
+consumer.add(42); // OK - запись
+// Integer value = consumer.get(0); // ERROR - чтение как Integer
+Object obj = consumer.get(0); // OK - чтение как Object
+
+// Пример использования в методе
+public static <T> void copy(List<? super T> dest, List<? extends T> src) {
+    for (T element : src) {
+        dest.add(element);
+    }
+}
+\end{minted}
+
+\end{enumerate}
+
+\endinput

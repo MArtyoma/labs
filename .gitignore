@@ -182,3 +182,4 @@ cython_debug/
 **/.tmp
 **/help.tex
 **/*.lua
+**/*.pdf

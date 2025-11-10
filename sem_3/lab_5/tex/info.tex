@@ -1,0 +1,70 @@
+\chapter{Теоретические сведения}
+% \label{ch:Task1}
+
+\section{Класс String и его особенности}
+Класс \texttt{String} в Java представляет собой неизменяемую последовательность символов Unicode. После создания объекта типа \texttt{String} его содержимое не может быть изменено. Любая операция, изменяющая строку, приводит к созданию нового объекта:
+
+\begin{minted}{java}
+String str = "Hello";
+str += ", World!";
+System.out.println(str); // Выведет "Hello, World!"
+\end{minted}
+
+Хотя переменная \texttt{str} кажется изменённой, на самом деле создаётся новая строка, а старая остаётся неизменной.
+
+Преимущества неизменяемости:
+\begin{itemize}
+  \item Безопасность в многопоточной среде.
+  \item Возможность кэширования хэш-кодов и интернирования строк.
+\end{itemize}
+
+Недостатки:
+\begin{itemize}
+  \item Высокое потребление памяти при множестве операций со строками.
+\end{itemize}
+
+Для частых изменений строк рекомендуется использовать \texttt{StringBuilder} или \texttt{StringBuffer}.
+
+\section{Интернирование строк}
+Интернирование — это механизм, при котором JVM сохраняет строковые литералы в пуле строк. Это позволяет избежать дублирования одинаковых строк:
+
+\begin{minted}{java}
+String s1 = "Hello";
+String s2 = "Hello";
+System.out.println(s1 == s2); // true
+\end{minted}
+
+Для строк, созданных через \texttt{new String()}, интернирование не происходит автоматически, но может быть выполнено вручную:
+
+\begin{minted}{java}
+String s3 = new String("World").intern();
+String s4 = "World";
+System.out.println(s3 == s4); // true
+\end{minted}
+
+\section{Unicode и длина строк}
+Java использует кодировку UTF-16 для представления строк. Некоторые символы (например, эмодзи) занимают более одного 16-битного блока (суррогатная пара). Для корректного определения количества символов следует использовать метод \texttt{codePointCount()}:
+
+\begin{minted}{java}
+String str = "Привет!";
+int lengthInCodePoints = str.length();
+int lengthInCodeUnits = str.codePointCount(0, str.length());
+System.out.println("Длина в code points: " + lengthInCodePoints);
+System.out.println("Длина в code units: " + lengthInCodeUnits);
+\end{minted}
+
+\section{Регулярные выражения}
+Регулярные выражения — мощный инструмент для поиска и обработки текста. В Java они реализованы через классы \texttt{Pattern} и \texttt{Matcher} из пакета \texttt{java.util.regex}.
+
+Пример поиска слова:
+
+\begin{minted}{java}
+String text = "The quick brown fox jumps over the lazy dog";
+Pattern pattern = Pattern.compile("fox");
+Matcher matcher = pattern.matcher(text);
+if (matcher.find()) {
+    System.out.println("Match found!");
+}
+\end{minted}
+
+\endinput

@@ -1,0 +1,266 @@
+\chapter{Введение}
+% \label{ch:Task1}
+
+\section{Цель работы}
+
+Изучение механизма аннотаций и Stream API в языке программирования Java, приобретение практических навыков создания пользовательских аннотаций, использования функциональных операций для обработки данных, а также освоение методов многопоточной обработки данных с использованием классов пакета \texttt{java.util.concurrent}.
+
+\section{Описание задачи}
+
+Разработать модульную систему обработки данных, демонстрирующую интеграцию трёх ключевых технологий Java:
+
+\begin{itemize}
+    \item \textbf{Механизм аннотаций} для метапрограммирования
+    \item \textbf{Stream API} для функциональной обработки данных
+    \item \textbf{Многопоточность} для повышения производительности
+\end{itemize}
+
+\subsection{Бизнес-логика приложения}
+Система должна обрабатывать наборы текстовых данных (названия фруктов), применяя к ним последовательность преобразований в многопоточном режиме.
+
+\section{Детальные технические требования}
+
+\subsection{Пользовательская аннотация @DataProcessor}
+
+\begin{minted}{java}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface DataProcessor {
+    String name() default "";
+    int priority() default 1;
+}
+\end{minted}
+
+\textbf{Требования к реализации:}
+\begin{itemize}
+    \item Сохраняться в runtime (\texttt{RetentionPolicy.RUNTIME})
+    \item Применяться только к методам (\texttt{ElementType.METHOD})
+    \item Содержать два параметра:
+    \begin{itemize}
+        \item \texttt{name} - имя обработчика (String)
+        \item \texttt{priority} - приоритет выполнения (int) со значением по умолчанию 1
+    \end{itemize}
+\end{itemize}
+
+\textbf{Назначение:} Маркировка методов, которые должны автоматически обнаруживаться и выполняться системой обработки данных.
+
+\subsection{Класс DataManager - ядро системы}
+
+\subsubsection{Методы и их функциональность}
+
+\textbf{registerDataProcessor(Object processor)}
+\begin{itemize}
+    \item Регистрирует объект-обработчик в системе
+    \item Использует рефлексию для поиска методов с аннотацией \texttt{@DataProcessor}
+    \item Должен поддерживать потокобезопасность при добавлении обработчиков
+\end{itemize}
+
+\textbf{loadData(String source)}
+\begin{itemize}
+    \item Имитирует загрузку данных из внешнего источника
+    \item Для варианта 5: должен загружать список из 10 названий фруктов на русском языке
+    \item Данные должны храниться в потокобезопасной коллекции
+\end{itemize}
+
+\textbf{processData()}
+\begin{itemize}
+    \item Организует многопоточную обработку данных
+    \item Создает пул потоков фиксированного размера (5 потоков)
+    \item Для каждого обработчика создает отдельную задачу
+    \item Учитывает приоритет выполнения методов (параметр priority аннотации)
+    \item Использует Stream API для обработки данных внутри каждого метода
+\end{itemize}
+
+\textbf{saveData(String destination)}
+\begin{itemize}
+    \item Сохраняет результаты обработки
+    \item Выводит данные в консоль (имитация сохранения в файл)
+\end{itemize}
+
+\subsection{Обработчики данных (для варианта 5)}
+
+\subsubsection{FilterProcessor - фильтрация данных}
+
+\textbf{Метод filterByVowels:}
+\begin{minted}{java}
+@DataProcessor(name = "vowelFilter", priority = 1)
+public List<String> filterByVowels(List<String> data) {
+    return data.stream()
+        .filter(s -> s.matches(".*[аеёиоуыэюя].*"))
+        .collect(Collectors.toList());
+}
+\end{minted}
+
+\textbf{Метод filterByLength:}
+\begin{minted}{java}
+@DataProcessor(name = "lengthFilter", priority = 2)
+public List<String> filterByLength(List<String> data) {
+    return data.stream()
+        .filter(s -> s.length() >= 5)
+        .collect(Collectors.toList());
+}
+\end{minted}
+
+\subsubsection{TransformProcessor - преобразование данных}
+
+\textbf{Метод transformToUpperCase:}
+\begin{minted}{java}
+@DataProcessor(name = "uppercaseTransform", priority = 3)
+public List<String> transformToUpperCase(List<String> data) {
+    return data.stream()
+        .map(String::toUpperCase)
+        .collect(Collectors.toList());
+}
+\end{minted}
+
+\textbf{Метод addPrefix:}
+\begin{minted}{java}
+@DataProcessor(name = "prefixTransform", priority = 4)
+public List<String> addPrefix(List<String> data) {
+    return data.stream()
+        .map(s -> "ФРУКТ" + s)
+        .collect(Collectors.toList());
+}
+\end{minted}
+
+\subsubsection{AggregateProcessor - агрегация данных}
+
+\textbf{Метод calculateStatistics:}
+\begin{minted}{java}
+@DataProcessor(name = "statisticsAggregate", priority = 5)
+public List<String> calculateStatistics(List<String> data) {
+    long count = data.stream().count();
+    String longest = data.stream()
+        .max((s1, s2) -> Integer.compare(s1.length(), s2.length()))
+        .orElse("");
+    
+    return List.of(
+        "Общее количество: " + count,
+        "Самый длинный элемент: " + longest,
+        "Длина самого длинного: " + longest.length()
+    );
+}
+\end{minted}
+
+\subsection{Требования к многопоточной обработке}
+
+\subsubsection{Организация потоков:}
+\begin{itemize}
+    \item Использование \texttt{ExecutorService} с фиксированным пулом из 5 потоков
+    \item Применение \texttt{Future} для получения результатов асинхронных задач
+    \item Обработка исключений \texttt{InterruptedException} и \\
+      \texttt{ExecutionException}
+\end{itemize}
+
+\subsubsection{Потокобезопасность:}
+\begin{itemize}
+    \item Использование \texttt{CopyOnWriteArrayList} для хранения данных и результатов
+    \item Синхронизированный доступ к общим ресурсам
+    \item Корректное завершение работы \texttt{ExecutorService}
+\end{itemize}
+
+\subsection{Требования к использованию Stream API}
+
+\subsubsection{В обработчиках данных:}
+\begin{itemize}
+    \item Применение операций \texttt{filter}, \texttt{map}, \texttt{sorted}, \texttt{collect}
+    \item Использование method references (\texttt{String::toUpperCase})
+    \item Применение лямбда-выражений для предикатов
+\end{itemize}
+
+\subsubsection{В самом DataManager:}
+\begin{itemize}
+    \item Stream API для обработки методов через рефлексию
+    \item Сортировка методов по приоритету
+    \item Преобразование результатов в коллекции
+\end{itemize}
+
+\section{Архитектурные требования}
+
+\subsection{Модульность системы}
+\begin{itemize}
+    \item Каждый обработчик представляет собой независимый компонент
+    \item Возможность легкого добавления новых обработчиков
+    \item Автоматическое обнаружение методов через аннотации
+\end{itemize}
+
+\subsection{Расширяемость}
+\begin{itemize}
+    \item Система должна позволять добавлять новые типы обработчиков без изменения существующего кода
+    \item Поддержка различных стратегий обработки данных
+\end{itemize}
+
+\subsection{Производительность}
+\begin{itemize}
+    \item Параллельное выполнение независимых операций
+    \item Эффективное использование ресурсов многопоточности
+    \item Минимизация блокировок
+\end{itemize}
+
+\section{Тестовые данные (для варианта 5)}
+
+\subsection{Исходные данные:}
+\begin{minted}{java}
+List<String> fruits = Arrays.asList(
+    "яблоко", "банан", "апельсин", "груша", "киви",
+    "ананас", "манго", "виноград", "персик", "слива"
+);
+\end{minted}
+
+\subsection{Ожидаемые результаты:}
+После применения всех обработчиков система должна вывести:
+\begin{itemize}
+    \item Преобразованные строки с префиксом "ФРУКТ"
+    \item Статистическую информацию о данных
+\end{itemize}
+
+\section{Критерии оценки}
+
+\subsection{Функциональные требования:}
+\begin{itemize}
+    \item Корректная работа аннотации \texttt{@DataProcessor}
+    \item Правильная многопоточная обработка
+    \item Применение всех зарегистрированных обработчиков
+    \item Корректное использование Stream API
+    \item Потокобезопасность реализации
+\end{itemize}
+
+\subsection{Качество кода:}
+\begin{itemize}
+    \item Чистая архитектура
+    \item Адекватная обработка исключений
+    \item Комментарии и документация
+    \item Соответствие Java Code Conventions
+\end{itemize}
+
+\subsection{Демонстрация знаний:}
+\begin{itemize}
+    \item Понимание механизма аннотаций
+    \item Владение Stream API
+    \item Умение работать с многопоточностью
+    \item Использование рефлексии
+\end{itemize}
+
+\section{Дополнительные рекомендации}
+
+\subsection{Для улучшения решения:}
+\begin{itemize}
+    \item Добавить валидацию входных параметров
+    \item Реализовать логирование процесса обработки
+    \item Добавить обработку ошибок для отдельных обработчиков
+    \item Реализовать возможность конфигурирования через properties-файлы
+\end{itemize}
+
+\subsection{Для тестирования:}
+\begin{itemize}
+    \item Написать unit-тесты для каждого обработчика
+    \item Протестировать многопоточность с большими объемами данных
+    \item Проверить обработку исключительных ситуаций
+\end{itemize}
+
+\begin{center}
+    \textit{Данная задача позволяет продемонстрировать комплексное понимание современных возможностей Java и их практическое применение для создания эффективных систем обработки данных.}
+\end{center}
+
+\endinput
+

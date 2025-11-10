@@ -1,0 +1,86 @@
+\chapter{Теоретические сведения}
+% \label{ch:Task1}
+
+\section{Понятие многопоточности}
+
+Многопоточность — это способность программы выполнять несколько задач параллельно в рамках одного процесса. В Java многопоточность реализуется с помощью механизма потоков (threads), которые представляют собой легковесные процессы, разделяющие общее адресное пространство.
+
+Каждый поток в Java имеет:
+\begin{itemize}
+    \item Собственный стек вызовов
+    \item Программный счетчик
+    \item Локальные переменные
+    \item Доступ к общей памяти процесса
+\end{itemize}
+
+\section{Создание потоков}
+
+В Java существует два основных способа создания потоков:
+
+\section{Наследование от класса Thread}
+
+\begin{minted}{java}
+public class MyThread extends Thread {
+    @Override
+    public void run() {
+        // Логика выполнения потока
+        System.out.println("Выполнение потока: " + getName());
+    }
+}
+\end{minted}
+
+\section{Реализация интерфейса Runnable}
+
+\begin{minted}{java}
+public class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        // Логика выполнения потока
+        System.out.println("Выполнение потока: " + 
+            Thread.currentThread().getName());
+    }
+}
+\end{minted}
+
+\section{Синхронизация потоков}
+
+Для предотвращения состояний гонки (race condition) и обеспечения корректного доступа к общим ресурсам используются механизмы синхронизации:
+
+\section{Ключевое слово synchronized}
+
+\begin{minted}{java}
+public class SynchronizedExample {
+    private int counter = 0;
+    
+    public synchronized void increment() {
+        counter++;
+    }
+}
+\end{minted}
+
+\section{Ключевое слово volatile}
+
+\begin{minted}{java}
+public class VolatileExample {
+    private volatile boolean flag = false;
+    
+    public void setFlag(boolean value) {
+        flag = value;
+    }
+}
+\end{minted}
+
+\section{CompletableFuture}
+
+CompletableFuture — это современный подход к асинхронному программированию в Java, который предоставляет богатый API для композиции асинхронных операций.
+
+Основные преимущества:
+\begin{itemize}
+    \item Цепочки асинхронных операций
+    \item Комбинация нескольких будущих результатов
+    \item Обработка исключений
+    \item Ручное завершение операций
+\end{itemize}
+
+\endinput
+

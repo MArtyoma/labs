@@ -1,0 +1,161 @@
+\chapter{Реализация}
+% \label{ch:Task1}
+
+\section{Задание 1. Среднее арифметическое элементов массива}
+
+Реализуем программу, вычисляющую среднее арифметическое элементов массива с обработкой исключений: \texttt{ArrayIndexOutOfBoundsException} (выход за границы массива) и \texttt{NumberFormatException} (если элемент не является числом — в случае, если массив задан как строковый).
+
+\begin{minted}{java}
+public class ArrayAverage {
+    public static void main(String[] args) {
+        // "abc" вызовет исключение
+        String[] arr = {"1", "2", "3", "4", "5", "abc"};
+        int sum = 0;
+        int count = 0;
+
+        try {
+            // Умышленная ошибка: i <= arr.length
+            for (int i = 0; i <= arr.length; i++) {
+                int num = Integer.parseInt(arr[i]);
+                sum += num;
+                count++;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Ошибка: выход за границы массива.");
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: элемент массива не является числом.");
+            e.printStackTrace();
+        } finally {
+            if (count > 0) {
+                double average = (double) sum / count;
+                System.out.println("Среднее арифметическое: " + average);
+            } else {
+                System.out.println("Невозможно вычислить среднее: нет корректных данных.");
+            }
+        }
+    }
+}
+\end{minted}
+
+\section{Задание 2. Копирование содержимого файла}
+
+Реализуем программу копирования одного файла в другой с обработкой исключений, связанных с открытием/закрытием и чтением/записью файлов.
+
+\begin{minted}{java}
+import java.io.*;
+
+public class FileCopy {
+    public static void main(String[] args) {
+        String sourceFile = "source.txt";
+        String destFile = "destination.txt";
+
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+
+        try {
+            fis = new FileInputStream(sourceFile);
+            fos = new FileOutputStream(destFile);
+
+            int byteData;
+            while ((byteData = fis.read()) != -1) {
+                fos.write(byteData);
+            }
+            System.out.println("Файл успешно скопирован.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Ошибка: файл не найден.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Ошибка при чтении или записи файла.");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+                System.out.println("Ошибка при закрытии файлов.");
+                e.printStackTrace();
+            }
+        }
+    }
+}
+\end{minted}
+
+\section{Задание 3 и 4. Пользовательское исключение для стека}
+
+Создадим собственный класс исключения \texttt{CustomEmptyStackException} и класс \texttt{CustomStack}, имитирующий стек.
+
+\begin{minted}{java}
+// CustomEmptyStackException.java
+public class CustomEmptyStackException extends Exception {
+    public CustomEmptyStackException(String message) {
+        super(message);
+    }
+}
+\end{minted}
+
+\begin{minted}{java}
+// CustomStack.java
+import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+public class CustomStack<T> {
+    private ArrayList<T> stack = new ArrayList<>();
+
+    public void push(T item) {
+        stack.add(item);
+    }
+
+    public T pop() throws CustomEmptyStackException {
+        if (stack.isEmpty()) {
+            logException("Попытка извлечь элемент из пустого стека");
+            throw new CustomEmptyStackException("Стек пуст!");
+        }
+        return stack.remove(stack.size() - 1);
+    }
+
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
+    private void logException(String message) {
+        try (FileWriter writer = new FileWriter("exceptions.log", true)) {
+            writer.write(LocalDateTime.now() + " - " + message + "\n");
+        } catch (IOException e) {
+            System.err.println("Не удалось записать в лог: " + e.getMessage());
+        }
+    }
+}
+\end{minted}
+
+\begin{minted}{java}
+// Main.java — демонстрация работы
+public class Main {
+    public static void main(String[] args) {
+        CustomStack<Integer> stack = new CustomStack<>();
+        
+        try {
+            stack.pop(); // Вызовет исключение
+        } catch (CustomEmptyStackException e) {
+            System.out.println("Перехвачено исключение: " + e.getMessage());
+        }
+        
+        stack.push(10);
+        stack.push(20);
+        try {
+            System.out.println("Извлечено: " + stack.pop());
+            System.out.println("Извлечено: " + stack.pop());
+            stack.pop(); // Снова пустой стек
+        } catch (CustomEmptyStackException e) {
+            System.out.println("Перехвачено исключение: " + e.getMessage());
+        }
+    }
+}
+\end{minted}
+
+При выполнении программы информация о каждом выброшенном исключении записывается в файл \texttt{exceptions.log}.
+
+\endinput
+

@@ -1,0 +1,100 @@
+\chapter{Реализация}
+% \label{ch:Task1}
+
+
+\section{Задание 1. Поиск всех чисел в тексте}
+Программа ищет целые и дробные числа в тексте.
+
+\begin{minted}{java}
+import java.util.regex.*;
+
+public class NumberFinder {
+    public static void main(String[] args) {
+        String text = "The price is $19.99 and quantity is 5.";
+        Pattern pattern = Pattern.compile("\\d+(\\.\\d+)?");
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("Найдено число: " + matcher.group());
+        }
+    }
+}
+\end{minted}
+
+\section{Задание 2. Проверка корректности пароля}
+Пароль должен быть длиной 8–16 символов, содержать хотя бы одну заглавную букву и одну цифру.
+
+\begin{minted}{java}
+import java.util.regex.*;
+
+public class PasswordValidator {
+    public static boolean isValid(String password) {
+        String regex = "^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,16}$";
+        return password != null && password.matches(regex);
+    }
+
+    public static void main(String[] args) {
+        String pwd = "MyPass123";
+        System.out.println("Пароль корректен: " + isValid(pwd));
+    }
+}
+\end{minted}
+
+\section{Задание 3. Поиск заглавной буквы после строчной}
+Программа находит все места, где строчная буква непосредственно сменяется заглавной, и оборачивает такие пары в восклицательные знаки.
+
+\begin{minted}{java}
+import java.util.regex.*;
+
+public class LowerToUpperFinder {
+    public static void main(String[] args) {
+        String text = "helloWorld thisIsJava";
+        String result = text.replaceAll("([a-z])([A-Z])", "$1!$2!");
+        System.out.println(result);
+    }
+}
+\end{minted}
+
+\section{Задание 4. Проверка корректности IP-адреса}
+Проверка, соответствует ли строка формату IPv4 (четыре числа от 0 до 255, разделённые точками).
+
+\begin{minted}{java}
+import java.util.regex.*;
+
+public class IPValidator {
+    public static boolean isValidIP(String ip) {
+        if (ip == null) return false;
+        String regex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        return ip.matches(regex);
+    }
+
+    public static void main(String[] args) {
+        String ip = "192.168.1.1";
+        System.out.println("IP корректен: " + isValidIP(ip));
+    }
+}
+\end{minted}
+
+\section{Задание 5. Поиск слов, начинающихся с заданной буквы}
+Программа ищет все слова, начинающиеся с указанной буквы (без учёта регистра).
+
+\begin{minted}{java}
+import java.util.regex.*;
+
+public class WordFinder {
+    public static void findWords(String text, char letter) {
+        String regex = "\\b" + letter + "[a-zA-Z]*";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("Найдено слово: " + matcher.group());
+        }
+    }
+
+    public static void main(String[] args) {
+        String text = "Apple banana cherry Applepie";
+        findWords(text, 'a');
+    }
+}
+\end{minted}
+
+\endinput
